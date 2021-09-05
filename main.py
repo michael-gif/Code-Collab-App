@@ -1,6 +1,8 @@
 import tkinter as tk
 import socket
 from win32api import GetMonitorInfo, MonitorFromPoint
+from threading import Thread
+from datetime import datetime
 
 root = tk.Tk()
 screen_width = root.winfo_screenwidth()
@@ -22,8 +24,17 @@ collab_box.place(x=10, y=10, width=root.winfo_width() - 20, height=root.winfo_he
 SERVER_HOST = '127.0.0.1'
 SERVER_PORT = 42069
 
-socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-socket.connect((SERVER_HOST, SERVER_PORT))
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_socket.connect((SERVER_HOST, SERVER_PORT))
+
+
+def listen_for_messages(cs):
+    while True:
+        try:
+            message_raw = cs.recv(1024).decode("utf-8")
+            print(message_raw)
+        except Exception as e:
+            print(e)
 
 
 def on_key(event):
@@ -31,6 +42,10 @@ def on_key(event):
 
 
 collab_box.bind('<Key>', on_key)
+
+listen_thread = Thread(target=listen_for_messages, args=(client_socket,))
+listen_thread.daemon = True
+listen_thread.start()
 
 while True:
     root.update_idletasks()
