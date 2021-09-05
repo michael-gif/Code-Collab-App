@@ -67,8 +67,8 @@ while True:
                 old_line = lines[new_line_number]
                 if old_line != replacement_line:
                     collab_box.delete(line_number + '.0', str(int(line_number) + 1) + '.0')
-                    collab_box.insert(line_number + '.0', replacement_line)
+                    collab_box.insert(line_number + '.0', replacement_line + '\n')
             else:
                 #collab_box.insert(tk.END, '\n')
-                collab_box.insert(line_number + '.0', replacement_line)
+                collab_box.insert(str(int(line_number) + 1) + '.0', replacement_line + '\n')
         message_queue.clear()
