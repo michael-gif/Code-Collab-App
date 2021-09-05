@@ -17,7 +17,6 @@ def get_date_now():
 
 
 def receive_message(cs, ca):
-    cs.send('connection yes'.encode('utf-8'))
     while True:
         try:
             message = cs.recv(1024).decode()
