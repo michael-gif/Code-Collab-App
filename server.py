@@ -2,12 +2,12 @@ import socket
 from threading import Thread
 from datetime import datetime
 
-HOST = '127.0.0.1'
+HOST = '0.0.0.0'
 PORT = 42069
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT))
-s.listen(5)
+s.listen()
 
 clients = []
 
@@ -29,7 +29,9 @@ def receive_message(cs, ca):
             break
 
         for client in clients:
-            client.send(message.encode('utf-8'))
+            if client is not cs:
+                client.send(message.encode('utf-8'))
+
 
 print(f"[{get_date_now()}] Server opened on {HOST}:{PORT}")
 
